@@ -9,6 +9,9 @@ header {
     color: rgb(var(--dark-accent));
     font-family: var(--font-primary);
     font-size: 0.9em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   .menus {
@@ -18,7 +21,7 @@ header {
     font-family: var(--font-primary);
 
     a {
-      color: rgb(var(--light-accent));
+      color: rgb(var(--warning-accent));
       font-size: 1em;
     }
   }

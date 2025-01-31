@@ -4,12 +4,15 @@ body.index-page {
   main {
     padding: 20px;
 
-    .content {
-      section {
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 20px;
-        gap: 20px;
+    .login-btn {
+      text-decoration: none;
+      padding: 6px 18px;
+      background-color: rgb(var(--light-accent));
+      color: rgb(var(--dark-accent));
+
+      &:hover {
+        background-color: rgb(var(--dark-accent));
+        color: rgb(var(--light-accent));
       }
     }
   }

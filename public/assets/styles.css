@@ -2,6 +2,8 @@ body {
   --primary-accent: 115, 104, 59;
   --dark-accent: 88, 62, 35;
   --light-accent: 176, 160, 132;
+  --warning-accent: 176, 48, 36;
+  --success-accent: 24, 176, 48;
   --background-color: 19, 38, 47;
   --foreground-color: 233, 230, 255;
   --font-accent: "Domine", serif;
@@ -30,11 +32,15 @@ body.index-page {
 body.index-page main {
   padding: 20px;
 }
-body.index-page main .content section {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 20px;
-  gap: 20px;
+body.index-page main .login-btn {
+  text-decoration: none;
+  padding: 6px 18px;
+  background-color: rgb(var(--light-accent));
+  color: rgb(var(--dark-accent));
+}
+body.index-page main .login-btn:hover {
+  background-color: rgb(var(--dark-accent));
+  color: rgb(var(--light-accent));
 }
 
 body.dashboard-page {
@@ -62,6 +68,9 @@ header .logo {
   color: rgb(var(--dark-accent));
   font-family: var(--font-primary);
   font-size: 0.9em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 header .menus {
   display: flex;
@@ -70,7 +79,7 @@ header .menus {
   font-family: var(--font-primary);
 }
 header .menus a {
-  color: rgb(var(--light-accent));
+  color: rgb(var(--warning-accent));
   font-size: 1em;
 }
 

@@ -3,21 +3,21 @@
 <head>
   <%- include('../components/HEAD', { TITLE: 'Private messaging app using Dugong v3' }) %>
 
-  <!-- import htmx for this page -->
+  <!-- import htmx for this page -- >
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-  <!-- import Alpine for this page -->
+  <! -- import Alpine for this page -- >
   <script src="https://unpkg.com/alpinejs" defer></script>
-  <!-- script used specifically by this page -->
-  <script src="assets/index.js" defer></script>
+  <! -- script used specifically by this page -- >
+  <script src="assets/index.js" defer></script> -->
 </head>
 
 <body class="index-page">
   <%- include('../components/molecules/Header') %>
   
   <main>
-    <div>
-      Login using Google account
-    </div>
+    <a href="/auth/login" class="login-btn">
+      Sign in with Google
+    </a>
   </main>
 
   <%- include('../components/molecules/Footer') %>

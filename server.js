@@ -9,6 +9,10 @@ import Fastify from 'fastify'
 import FastifyView from '@fastify/view'
 import FastifyStatic from '@fastify/static'
 
+import FastifyCookie from '@fastify/cookie';
+import FastifySession from '@fastify/session';
+import FastifyOauth2 from '@fastify/oauth2';
+
 import { createClient } from '@supabase/supabase-js'
 import * as sass from 'sass'
 import ejs from 'ejs'
@@ -37,13 +41,43 @@ const server = Fastify({
   }
 })
 
-// Register plugins
+// Register plugins = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 server.register(FastifyView, {
   engine: { ejs }
 })
+
 server.register(FastifyStatic, {
   root: join(__dirname, 'public'),
   prefix: '/'
+})
+
+// Register cookie and session
+server.register(FastifyCookie)
+server.register(FastifySession, {
+  secret: process.env.SESSION_SECRET,
+  cookie: { secure: false },
+  saveUninitialized: false,
+})
+
+// Register Google OAuth
+server.register(FastifyOauth2, {
+  name: 'googleOAuth',
+  scope: ['profile', 'email'],
+  credentials: {
+    client: {
+      id: process.env.GOOGLE_CLIENT_ID,
+      secret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+    auth: FastifyOauth2.GOOGLE_CONFIGURATION,
+  },
+  startRedirectPath: '/auth/login',
+  callbackUri: process.env.GOOGLE_CALLBACK_URL,
+})
+
+// Middleware to check authentication
+server.addHook('preHandler', (req, _, done) => {
+  req.isAuthenticated = !!req.session.user
+  done()
 })
 
 
@@ -76,13 +110,37 @@ const SUPABASE = createClient(supabaseUrl, supabaseKey, options)
 // Endpoints = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// SSR Pages
+// Login/home page
 server.get('/', async (_, reply) => {
   return reply.view(`${VIEWS_DIR}/pages/index.ejs`)
 })
 
-server.get('/dashboard', async (_, reply) => {
-  return reply.view(`${VIEWS_DIR}/pages/dashboard.ejs`)
+// Route: Handle Google OAuth callback
+server.get('/auth/callback', async (req, reply) => {
+  const token = await server.googleOAuth.getAccessTokenFromAuthorizationCodeFlow(req)
+
+  // Extract user info
+  const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { Authorization: `Bearer ${token.token.access_token}` },
+  }).then(res => res.json())
+
+  // Save user info to session
+  req.session.user = userInfo
+
+  reply.redirect('/dashboard')
+})
+
+// Dashboard page (PROTECTED)
+server.get('/dashboard', async (req, reply) => {
+  if (!req.isAuthenticated) return reply.redirect('/')
+
+  return reply.view(`${VIEWS_DIR}/pages/dashboard.ejs`, { user: req.session.user })
+})
+
+// Route: Logout
+server.get('/logout', (req, reply) => {
+  req.session.destroy()
+  reply.redirect('/')
 })
 
 

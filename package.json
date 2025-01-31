@@ -5,7 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch views --watch public --watch . -e js,ejs,scss server.js",
+    "dev:watch": "nodemon --watch views --watch public --watch . -e js,ejs,scss server.js",
+    "dev": "node server.js",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,7 +22,10 @@
   "author": "Arie M. Prasetyo",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/oauth2": "^8.1.1",
     "@fastify/one-line-logger": "^2.0.2",
+    "@fastify/session": "^11.1.0",
     "@fastify/static": "^8.0.4",
     "@fastify/view": "^10.0.2",
     "@supabase/supabase-js": "^2.48.1",
