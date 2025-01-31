@@ -1,0 +1,30 @@
+body {
+  --primary-accent: 115, 104, 59;
+  --dark-accent: 88, 62, 35;
+  --light-accent: 176, 160, 132;
+  --background-color: 19, 38, 47;
+  --foreground-color: 233, 230, 255;
+
+  --font-accent: "Domine", serif;
+  --font-primary: "Noto Sans Display", sans-serif;
+
+  background-color: rgb(var(--background-color));
+  color: rgb(var(--foreground-color));
+
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+a {
+  color: rgb(var(--primary-accent));
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
