@@ -22,7 +22,7 @@ import fs from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
-import { loadMessages } from './models/message.js'
+import { loadMessages } from './models/messages.js'
 
 
 dotenv.config()
@@ -31,6 +31,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const SERVICE_PORT_NUMBER = 3330
 const VIEWS_DIR = 'views';
 
+const IS_DEV = process.argv.includes('--dev')
 
 // Create the server = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 const server = Fastify({
@@ -55,8 +56,12 @@ server.register(FastifyStatic, {
 server.register(FastifyCookie)
 server.register(FastifySession, {
   secret: process.env.SESSION_SECRET,
-  cookie: { secure: false },
-  saveUninitialized: false,
+  cookie: {
+    secure: false
+  },
+  maxAge: 86400000, // Session expiration time in milliseconds (e.g., 24 hours)
+  saveUninitialized: false, // Do not save uninitialized sessions
+  resave: false // Do not resave sessions if they are unmodified
 })
 
 // Register Google OAuth
@@ -112,7 +117,7 @@ const SUPABASE = createClient(supabaseUrl, supabaseKey, options)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Login/home page
 server.get('/', async (_, reply) => {
-  return reply.view(`${VIEWS_DIR}/pages/index.ejs`)
+  return reply.view(`${VIEWS_DIR}/pages/index.html.ejs`)
 })
 
 // Route: Handle Google OAuth callback
@@ -132,9 +137,24 @@ server.get('/auth/callback', async (req, reply) => {
 
 // Dashboard page (PROTECTED)
 server.get('/dashboard', async (req, reply) => {
-  if (!req.isAuthenticated) return reply.redirect('/')
+  if (!IS_DEV && !req.isAuthenticated) return reply.redirect('/')
 
-  return reply.view(`${VIEWS_DIR}/pages/dashboard.ejs`, { user: req.session.user })
+  return reply.view(`${VIEWS_DIR}/pages/dashboard.html.ejs`, { user: req.session.user })
+})
+
+// Route: Get messages (PROTECTED)
+server.get('/api/messages', async (req, reply) => {
+  if (!IS_DEV && !req.isAuthenticated) return reply.redirect('/404')
+
+  const messages = await loadMessages(SUPABASE, 1) // user_id = 1 for now
+
+  if (messages.status === 'error') return reply.code(500).send('Error fetching messages')
+
+  // get template
+  const template = await fs.readFileSync(join(__dirname, `${VIEWS_DIR}/components/atoms/MessageItem.ejs`), 'utf8')
+  const result = await messages.data.map(message => (ejs.render(template, { message }))).join('')
+
+  reply.type('text/html').send(result)
 })
 
 // Route: Logout
@@ -143,6 +163,15 @@ server.get('/logout', (req, reply) => {
   reply.redirect('/')
 })
 
+// Route: 404
+server.get('/404', (_, reply) => {
+  return reply.view(`${VIEWS_DIR}/pages/404.html.ejs`)
+})
+
+// Catch-all route for non-existent routes
+server.setNotFoundHandler((_, reply) => {
+  reply.redirect('/404')
+})
 
 // Start the server = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 const start = async () => {

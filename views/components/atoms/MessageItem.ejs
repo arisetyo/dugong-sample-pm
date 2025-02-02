@@ -1,0 +1,16 @@
+<div class="message">
+  <span class="sender">
+    From: <%= message.senders.sender_name %>
+  </span>
+  
+  <span class="date">
+    at: <%= new Date(message.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) %>
+  </span>
+  
+  <div
+    class="subject"
+    @click="message_id = `<%= message.id %>`, message = `<%= message.message %>`"
+  >
+    Subject: <strong><%= message.subject %></strong>
+  </div>
+</div>

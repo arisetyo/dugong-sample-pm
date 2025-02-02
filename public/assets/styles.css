@@ -48,13 +48,40 @@ body.dashboard-page {
 }
 body.dashboard-page main {
   padding: 20px;
+  display: flex;
+  flex-direction: row;
 }
-body.dashboard-page main section {
-  margin: 0 0 30px 0;
+body.dashboard-page main .messages {
+  width: 30vw;
 }
-body.dashboard-page main section h1 {
-  font-size: 2em;
-  margin-bottom: 20px;
+body.dashboard-page main .messages .message {
+  padding: 0 0 12px 0;
+  border-bottom: 1px solid rgb(var(--dark-accent));
+  cursor: pointer;
+}
+body.dashboard-page main .messages .message .sender {
+  color: rgb(var(--primary-accent));
+  font-weight: bold;
+  display: block;
+}
+body.dashboard-page main .messages .message .date {
+  color: rgb(var(--light-accent));
+  font-size: 0.8em;
+  display: block;
+}
+body.dashboard-page main .messages .message .subject {
+  font-size: 1.2em;
+  display: block;
+}
+body.dashboard-page main .message_content {
+  background-color: rgb(var(--light-accent));
+  width: 70vw;
+  padding: 20px;
+}
+body.dashboard-page main .message_content p {
+  margin: 0;
+  padding: 0;
+  color: rgb(var(--background-color));
 }
 
 header {
@@ -64,7 +91,10 @@ header {
   align-items: flex-end;
   padding: 12px 20px;
 }
-header .logo {
+header a:hover {
+  text-decoration: none;
+}
+header a .logo {
   color: rgb(var(--dark-accent));
   font-family: var(--font-primary);
   font-size: 0.9em;
@@ -82,6 +112,27 @@ header .menus a {
   color: rgb(var(--warning-accent));
   font-size: 1em;
 }
+header .menus .profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 20px;
+}
+header .menus .profile img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+header .menus .profile span {
+  font-size: 1em;
+  color: rgb(var(--dark-accent));
+}
+header .menus .logout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 
 footer {
   font-size: 0.8em;
@@ -90,16 +141,4 @@ footer {
   position: absolute;
   bottom: 0;
   padding: 20px;
-}
-
-button {
-  min-width: 240px;
-  height: 60px;
-  padding: 10px;
-  border-radius: 8px;
-  background-color: rgb(var(--primary-accent));
-  color: rgb(var(--background-color));
-  font-size: 1.2em;
-  border: none;
-  cursor: pointer;
 }

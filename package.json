@@ -5,8 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev:watch": "nodemon --watch views --watch public --watch . -e js,ejs,scss server.js",
-    "dev": "node server.js",
+    "dev": "nodemon --watch views --watch public --watch . -e js,ejs,scss server.js --dev",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

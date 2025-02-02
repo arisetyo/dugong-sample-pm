@@ -3,13 +3,45 @@ body.dashboard-page {
   
   main {
     padding: 20px;
+    display: flex;
+    flex-direction: row;
 
-    section {
-      margin: 0 0 30px 0;
+    .messages {
+      width: 30vw;
+      
+      .message {
+        padding: 0 0 12px 0;
+        border-bottom: 1px solid rgb(var(--dark-accent));
+        cursor: pointer;
 
-      h1 {
-        font-size: 2em;
-        margin-bottom: 20px;
+        .sender {
+          color: rgb(var(--primary-accent));
+          font-weight: bold;
+          display: block;
+        }
+
+        .date {
+          color: rgb(var(--light-accent));
+          font-size: 0.8em;
+          display: block;
+        }
+
+        .subject {
+          font-size: 1.2em;
+          display: block;
+        }
+      }
+    }
+
+    .message_content {
+      background-color: rgb(var(--light-accent));
+      width: 70vw;
+      padding: 20px;
+      
+      p {
+        margin: 0;
+        padding: 0;
+        color: rgb(var(--background-color));
       }
     }
   }

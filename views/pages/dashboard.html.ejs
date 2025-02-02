@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <%- include('../components/HEAD', { TITLE: 'Private messaging app using Dugong v3 - Dashboard' }) %>
+
+  <!-- import htmx for this page -->
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <!-- import Alpine for this page -->
+  <script src="https://unpkg.com/alpinejs" defer></script>
+
+<body class="dashboard-page">
+
+  <%- include('../components/molecules/Header', { user: user }) %>
+  
+  <main
+    hx-get="/api/messages"
+    hx-trigger="load"
+    hx-target="#messages"
+    hx-swap="innerHTML"
+    x-data="{
+      message_id: null,
+      message: null
+    }"
+  >
+    <div
+      class="messages"
+      id="messages"
+    >
+      <span>Loading...</span>
+    </div>
+
+    <div
+      class="message_content"
+      id="message_content"
+      x-show="message_id"
+      x-cloak
+      x-transition:enter.duration.500ms
+      x-transition:leave.duration.400ms
+    >
+      <p x-text="message"></p>
+    </div>
+  </main>
+
+  <%- include('../components/molecules/Footer') %>
+
+</body>
+</html>

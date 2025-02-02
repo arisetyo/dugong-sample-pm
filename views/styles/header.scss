@@ -5,13 +5,21 @@ header {
   align-items: flex-end;
   padding: 12px 20px;
 
-  .logo {
-    color: rgb(var(--dark-accent));
-    font-family: var(--font-primary);
-    font-size: 0.9em;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  a {
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    .logo {
+      color: rgb(var(--dark-accent));
+      font-family: var(--font-primary);
+      font-size: 0.9em;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
   }
 
   .menus {
@@ -23,6 +31,31 @@ header {
     a {
       color: rgb(var(--warning-accent));
       font-size: 1em;
+    }
+
+    .profile {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-right: 20px;
+
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      span {
+        font-size: 1em;
+        color: rgb(var(--dark-accent));
+      }
+    }
+
+    .logout {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
   }
 }
