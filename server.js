@@ -22,7 +22,7 @@ import fs from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
-import { loadMessages } from './models/messages.js'
+import { loadMessages, loadMessage } from './models/messages.js'
 
 
 dotenv.config()
@@ -142,6 +142,7 @@ server.get('/dashboard', async (req, reply) => {
   return reply.view(`${VIEWS_DIR}/pages/dashboard.html.ejs`, { user: req.session.user })
 })
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Route: Get messages (PROTECTED)
 server.get('/api/messages', async (req, reply) => {
   if (!IS_DEV && !req.isAuthenticated) return reply.redirect('/404')
@@ -157,6 +158,19 @@ server.get('/api/messages', async (req, reply) => {
   reply.type('text/html').send(result)
 })
 
+// Route: Get a single message (PROTECTED)
+server.get('/api/message/:id', async (req, reply) => {
+  if (!IS_DEV && !req.isAuthenticated) return reply.redirect('/404')
+
+  const message = await loadMessage(SUPABASE, req.params.id)
+
+  if (message.status === 'error') return reply.code(500).send('Error fetching message')
+
+  reply.type('text/html').send(`<pre>${message.data[0].message}</pre>`)
+})
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Route: Logout
 server.get('/logout', (req, reply) => {
   req.session.destroy()

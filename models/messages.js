@@ -25,4 +25,24 @@ const loadMessages = async (SUPABASE, user_id) => {
   return { status: 'success', data }
 }
 
-export { loadMessages }
+// Load a single message from the database
+const loadMessage = async (SUPABASE, message_id) => {
+  const { data, error } = await SUPABASE
+    .from('messages')
+    .select(`
+      id,
+      message,
+      created_at,
+      senders:senders!messages_sender_id_fkey ( id, sender_name )
+    `)
+    .eq('id', message_id)
+
+  if (error) {
+    console.error('Error fetching message:', error)
+    return { status: 'error' }
+  }
+
+  return { status: 'success', data }
+}
+
+export { loadMessages, loadMessage }

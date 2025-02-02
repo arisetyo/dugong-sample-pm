@@ -9,7 +9,11 @@
   
   <div
     class="subject"
-    @click="message_id = `<%= message.id %>`, message = `<%= message.message %>`"
+    hx-get="/api/message/<%= message.id %>"
+    hx-trigger="click"
+    hx-target="#message_content"
+    hx-swap="innerHTML"
+    @click="message_id = <%= message.id %>"
   >
     Subject: <strong><%= message.subject %></strong>
   </div>

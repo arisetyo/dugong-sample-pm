@@ -18,15 +18,14 @@
     hx-target="#messages"
     hx-swap="innerHTML"
     x-data="{
-      message_id: null,
-      message: null
+      message_id: null
     }"
   >
     <div
       class="messages"
       id="messages"
     >
-      <span>Loading...</span>
+      <span>Loading messages...</span>
     </div>
 
     <div
@@ -37,7 +36,7 @@
       x-transition:enter.duration.500ms
       x-transition:leave.duration.400ms
     >
-      <p x-text="message"></p>
+      <span>Loading message...</span>
     </div>
   </main>
 
